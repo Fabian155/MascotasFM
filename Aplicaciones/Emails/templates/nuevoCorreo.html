@@ -1,0 +1,131 @@
+{% extends "./plantilla.html" %}
+{% block contenido %}
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 bg-light">
+        <h1>Nuevo Mensjas</h1>
+        <!-- 1. Primeor se debe que todo lo componente tenga id,name ma sinportante id -->
+
+        <form action="{% url 'GuardarCO' %}" method="post" id="frm_nuevoCorreo" enctype="multipart/form-data">
+            <!-- 2.  AGregar id al formualrio nec esario para sabe a quin validar  -->
+            {% csrf_token %}
+            <label for="">Destinatario:</label><br>
+            <input class="form-control" type="text" name="destinatario" id="destinatario" placeholder="INgrese NOmbre">
+            <br>
+            <label for="">Asunto:</label><br>
+            <input class="form-control" type="text" name="asunto" id="asunto" placeholder="Ingrse requsitos como experiencia.etc">
+            <br>
+            <label for="">Fecha de envio:</label><br>
+            <input class="form-control" type="date" name="fecha" id="fecha" placeholder="Ingrse requsitos como experiencia.etc" min="{{ hoy }}">
+            <br>
+            <label for="">Fecha de Actualizacion:</label><br>
+            <input class="form-control" type="date" name="fechaAct" id="fechaAct" placeholder="Ingrse requsitos como experiencia.etc" value="{{ hoy }}" readonly>
+            <br>
+            <label for="">Mensaje:</label><br>
+            <input class="form-control" type="text" name="mensaje" id="mensaje"
+                placeholder="Ingrese mensaje como .etc">
+            <br>
+
+            <label for="">Archivo:</label><br>
+            <input class="form-control" type="file" name="archivo" id="archivo" placeholder="Sleciones una imagen"><br>
+
+            <br>
+            <button class="form-control" type="submit" class="btn btn-success">Guardar</button>
+            <a href="/" class="btn btn-outline-danger">Cancelar</a> <!-- invoca al inicio-->
+        </form>
+
+
+    </div>
+    <div class="col-m-3"></div>
+
+    <!-- 3.  embeber codigo javascript/jquery dentro del html asi s ellam cundo pone un scrip-->
+
+    <script>
+        $("#frm_nuevoCorreo").validate({
+            rules: {
+
+                "destinatario": {
+                    required: true,
+                    minlength: 1, // maxlenth cunrta los caracteres 
+                    maxlength: 100,
+                },
+
+                "asunto": {
+                    required: true
+                },
+
+                "fecha": {
+                    required: true
+                },
+
+                "fechaAct": {
+                    required: true
+                },
+
+                "mensaje": {
+                    required: true
+                },
+
+                "horario": {
+                    required: true
+                },
+
+                "sueldo": {
+                    required: true,
+                    number: true,
+                    min: 200,
+                    max: 5000
+
+                }
+            },
+            messages: {
+                "destinatario": {
+                    required: "Campo Obligatorio",
+                    minlength: "ingresse hasta  1 letras  ", // maxlenth cunrta los caracteres 
+                    maxlength: "SOlo un maximo de 100 letras ",
+                },
+                "asunto": {
+                    required: "Ingrese requistos"
+                },
+
+                "fecha": {
+                    required: "Ingrese la fecha"
+                },
+
+                "fechaAct": {
+                    required: "Ingrese la fecha actualizada"
+                },
+
+                "mensaje": {
+                    required: "INgrese Funciones"
+                },
+
+            }
+        })
+    </script>
+
+
+<script>
+    $("#archivo").fileinput({
+            language: "es",
+            allowedFileExtensions: ["png", "jpg", "jpeg"],
+            showCaption: false,
+            dropZoneEnabled: true,
+            showClose: false,
+            showUpload: false 
+    });
+</script>
+
+<script>
+    $("#pdf").fileinput({
+            language: "es",
+            allowedFileExtensions: ["pdf"],
+            showCaption: false,
+            dropZoneEnabled: true,
+            showClose: false,
+            showUpload: false 
+    });
+</script>
+</div>
+
+{% endblock %}
