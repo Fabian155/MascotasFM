@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class AdopcionuConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'AdopcionU'
+    name = 'Aplicaciones.Usuario.AdopcionU'
