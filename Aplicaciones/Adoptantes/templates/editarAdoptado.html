@@ -1,0 +1,122 @@
+{% extends "plantilla.html" %}
+{% load static %}
+{%block contenido %}
+
+<div class="col-md-3"></div>
+<div class="col-md-6"></div>
+<h1>EDITAR AL CLIENTE</h1>
+<form action="{% url 'GuardarEdicion2' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <input type="hidden" name="id" value="{{editarA.id}}"></input>
+    <label for="">Nombre:</label><br>
+    <input class="form-control" type="text" name="nombre" id="nombre" value="{{editarA.nombre}}"> <br>
+    <label for="">Cedula:</label><br>
+    <input class="form-control" type="text" name="cedula" id="cedula" value="{{editarA.cedula}}">  <br>
+    <label for="">Direccion:</label><br>
+    <input class="form-control" type="text" name="direccion" id="direccion" value="{{editarA.direccion}}">  <br>
+    <label for="">Telefono:</label><br>
+    <input class="form-control" type="text" name="telefono" id="telefono" value="{{editarA.telefono}}">  <br>
+
+    <label for="logo">Logotipo:</label><br>
+    {% if editarA.logo %}
+    <img src="{{ editarA.logo.url }}" alt="Logo actual" width="120"><br><br>
+    {% else %}
+    <small>No hay logotipo cargado</small><br><br>
+    {% endif %}
+    <!-- Subir nuevo logotipo -->
+    <input class="form-control" type="file" name="logo" id="logo">
+    <br>
+
+    <!-- Archivo PDF actual -->
+    <label for="pdf">Archivo PDF:</label><br>
+    {% if editarA.pdf %}
+    <a href="{{ editarA.pdf.url }}" target="_blank">Ver PDF actual</a><br><br>
+    {% else %}
+    <small>No hay archivo PDF cargado</small><br><br>
+    {% endif %}
+    <!-- Subir nuevo archivo PDF -->
+    <input class="form-control" type="file" name="pdf" id="pdf" accept="application/pdf">
+    <br>
+
+    <button class="btn btn-success" type="submit">GUARDAR</button>
+    <a class="btn btn-outline-danger" href="/">Cancelar</a>
+
+</form>
+
+<script>
+    $("#frm_nuevoAdoptante").validate({
+        rules: {
+            "nombre": {
+                required: true,
+                minlength: 3, 
+                maxlength: 20
+            },
+
+            "cedula": {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10
+            },
+
+            "direccion": {
+                required: true
+            },
+
+            "telefono": {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10,
+                pattern: /^0\d{9}$/
+            }
+        },
+        messages: {
+            "nombre": {
+                required: "Campo Obligatorio",
+                minlength: "Ingrese bien el nombre", 
+                maxlength: "Tampoco tan largo el nombre"
+            },
+
+            "cedula": {
+                required: "Ingrese su cédula",
+                digits: "Solo se permiten números",
+                minlength: "La cédula debe tener 10 dígitos",
+                maxlength: "La cédula debe tener exactamente 10 dígitos"
+            },
+
+            "direccion": {
+                required: "Ingrese su dirección"
+            },
+
+            "telefono": {
+                required: "Ingrese su celular",
+                digits: "Solo se permiten números",
+                minlength: "El celular debe tener 10 dígitos",
+                maxlength: "El celular debe tener exactamente 10 dígitos",
+                pattern: "El número debe comenzar con 0"
+            }
+        }
+    });
+</script>
+
+
+<script>
+    $("#logo").fileinput({
+        theme: "bootstrap5",  
+        language: "es",
+        allowedFileExtensions: ["jpg", "jpeg", "png"],
+        showUpload: false,
+        dropZoneEnabled: true,
+        maxFileSize: 2000,
+        showPreview: true,
+        browseLabel: "Seleccionar imagen",
+        removeLabel: "Eliminar",
+        initialCaption: "Arrastra y suelta la imagen aquí",
+        showRemove: true,
+        showZoom: true,
+        showDrag: true
+    });
+</script>
+{% endblock %}
