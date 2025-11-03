@@ -11,15 +11,19 @@ def formulario_adoptante(request):
         cedula = request.POST.get("cedula")
         direccion = request.POST.get("direccion")
         telefono = request.POST.get("telefono")
+        logo = request.FILES.get("logo")
+        pdf = request.FILES.get("pdf")
 
-        # Guardar datos en la tabla original de Adoptantes (admin)
         Adoptante.objects.create(
             nombre=nombre,
             cedula=cedula,
             direccion=direccion,
-            telefono=telefono
+            telefono=telefono,
+            logo=logo,   
+            pdf=pdf      
         )
-        messages.success(request, "Tus datos se registraron correctamente.")
-        return redirect('adoptanteu:u_form_adoptante')
 
-    return render(request, 'formularioU.html')
+        messages.success(request, "Tus datos se registraron correctamente.")
+        return redirect('adoptanteu:inicioF')
+
+    return render(request, 'inicioU2.html')
