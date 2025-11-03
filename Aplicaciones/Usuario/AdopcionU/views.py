@@ -9,27 +9,33 @@ from Aplicaciones.Animales.models import AnimalAdoptable
 @login_required(login_url='login')
 def solicitarA(request, animal_id):
     animal = get_object_or_404(AnimalAdoptable, id=animal_id)
-    adoptante = Adoptante.objects.filter(nombre=request.user.first_name).first()
 
-    if request.method == 'POST':
-        observacion = request.POST.get('observacion')
+    if request.method == 'GET':
+        return render(request, 'inicioU3.html', {'animal': animal})
+    observacion = request.POST.get('observacion', '').strip()
 
-        if not adoptante:
-            messages.warning(request, "Debes registrar tus datos en el módulo de Adoptante antes de solicitar una adopción.")
-            return redirect('adoptanteu:inicioF')
-        SolicitudAdopcion.objects.create(
-            adoptante=adoptante,
-            animal=animal,
-            observacion=observacion
-        )
-        messages.success(request, f"Has solicitado adoptar a {animal.nombre}. Espera la respuesta del administrador.")
-        return redirect('animalesu:u_animales')
+    if not Adoptante.objects.exists():
+        messages.warning(request, "Debes registrar tus datos antes de solicitar una adopción.")
+        return redirect('adoptanteu:inicioF')
+    adoptante = Adoptante.objects.latest('id')
 
-    return render(request, 'inicioU3.html', {'animal': animal})
+    SolicitudAdopcion.objects.create(
+        adoptante=adoptante,
+        animal=animal,
+        observacion=observacion
+    )
+
+    messages.success(request, f"Has solicitado adoptar a {animal.nombre}. Espera la respuesta del administrador.")
+    return redirect('animalesu:u_animales')
+
 
 
 @login_required(login_url='login')
 def historial(request):
-    # Mostrar solo las solicitudes hechas por el usuario actual
-    solicitudes = SolicitudAdopcion.objects.filter(adoptante__nombre=request.user.first_name)
+    """
+    Muestra todas las solicitudes del usuario actual.
+    Si más adelante enlazas usuarios con adoptantes,
+    aquí se puede filtrar por el adoptante que pertenece al usuario logueado.
+    """
+    solicitudes = SolicitudAdopcion.objects.all().order_by('-fecha_solicitud')
     return render(request, 'historialU.html', {'solicitudes': solicitudes})

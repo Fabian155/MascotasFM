@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from .models import Adopcion
 from Aplicaciones.Animales.models import AnimalAdoptable
 from Aplicaciones.Adoptantes.models import Adoptante
+from Aplicaciones.Usuario.AdopcionU.models import SolicitudAdopcion
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -66,6 +68,21 @@ def GuardarEdicion3(request):
     editale.save()
     messages.success(request, "Actualizacion correcta")
     return redirect('inicioC')
+
+def lista_solicitudes(request):
+    solicitudes = SolicitudAdopcion.objects.all().order_by('-fecha_solicitud')
+    return render(request, 'inicioH.html', {'solicitudes': solicitudes})
+
+
+@login_required(login_url='login')
+def actualizar_estado(request, solicitud_id, nuevo_estado):
+    solicitud = get_object_or_404(SolicitudAdopcion, id=solicitud_id)
+
+    solicitud.estado = nuevo_estado.upper()  # Aprobada / Rechazada / Pendiente
+    solicitud.save()
+
+    messages.success(request, f"El estado de la solicitud de {solicitud.adoptante.nombre} fue actualizado a {nuevo_estado}.")
+    return redirect('adopcion:lista_solicitudes')
 
 
 

@@ -43,13 +43,11 @@
         </td>
 
         <td>
-          <form action="{% url 'adopcionu:inicioG' a.id %}" method="post" class="d-inline">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary btn-sm">
-              Solicitar adopción
-            </button>
-          </form>
+            <a href="{% url 'adopcionu:inicioG' a.id %}" class="btn btn-primary btn-sm">
+                Solicitar adopción
+            </a>
         </td>
+
       </tr>
     {% empty %}
       <tr>

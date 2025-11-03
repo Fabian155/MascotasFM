@@ -1,0 +1,64 @@
+{% extends "plantillaU.html" %}
+{% load static %}
+{% block contenido %}
+
+<h2 class="text-center mb-4">Mis Solicitudes de Adopción</h2>
+
+<table class="table table-bordered table-hover" id="tbl_historial">
+  <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Animal</th>
+      <th>Fecha</th>
+      <th>Observación</th>
+      <th>Estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for s in solicitudes %}
+      <tr>
+        <td>{{ s.id }}</td>
+        <td>{{ s.animal.nombre }}</td>
+        <td>{{ s.fecha_solicitud }}</td>
+        <td>{{ s.observacion|default:"-" }}</td>
+        <td>
+          {% if s.estado == "APROBADA" %}
+            <span class="badge bg-success">{{ s.estado }}</span>
+          {% elif s.estado == "RECHAZADA" %}
+            <span class="badge bg-danger">{{ s.estado }}</span>
+          {% else %}
+            <span class="badge bg-warning text-dark">{{ s.estado }}</span>
+          {% endif %}
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="5" class="text-center text-muted">Aún no has realizado ninguna solicitud.</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script>
+  $(document).ready(function() {
+    $('#tbl_historial').DataTable({
+      dom: 'Bfrtip',
+      buttons: ['copy', 'excel', 'pdf', 'print'],
+      language: { url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json' }
+    });
+  });
+</script>
+
+{% if messages %}
+  {% for mensaje in messages %}
+  <script>
+    Swal.fire({
+      title: "Información",
+      text: "{{ mensaje }}",
+      icon: "info"
+    });
+  </script>
+  {% endfor %}
+{% endif %}
+
+{% endblock %}
