@@ -1,0 +1,105 @@
+{% extends "plantilla.html" %}
+{% load static %}
+{% block contenido %}
+
+<h1>AGREGA OTRO ADOPTADOR</h1>
+<form action="GuardarAD" method="post" id="frm_nuevoAdoptante" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <label for="">Nombre:</label><br>
+    <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Ingrese el nombre"> <br>
+    <label for="">Cedula:</label><br>
+    <input class="form-control" type="text" name="cedula" id="cedula" placeholder="Ingrese su cedula de identidad"> <br>
+    <label for="">Direccion:</label><br>
+    <input class="form-control" type="text" name="direccion" id="direccion" placeholder="Ingrese su direccion de domicilio"> <br>
+    <label for="">Telefono:</label><br>
+    <input class="form-control" type="text" name="telefono" id="telefono" placeholder="Ingrese su celular"> <br>
+
+    <label for="">Foto del Adoptante:</label><br>
+    <input class="form-control" type="file" name="logo" id="logo" accept="image/*" placeholder="Sleciones una imagen"><br>
+
+    <label for="pdf">Archivo PDF de A ntecedentes:</label><br>
+    <input class="form-control" type="file" name="pdf" id="pdf" accept="application/pdf"><br>
+    
+
+    <button class="btn btn-success" type="submit">GUARDAR</button> <br><br>
+    <a class="btn btn-outline-danger" href="/">CANCELAR</a> <br><br>
+
+</form>
+
+<script>
+    $("#frm_nuevoAdoptante").validate({
+        rules: {
+            "nombre": {
+                required: true,
+                minlength: 3, 
+                maxlength: 20
+            },
+
+            "cedula": {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10
+            },
+
+            "direccion": {
+                required: true
+            },
+
+            "telefono": {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10,
+                pattern: /^0\d{9}$/
+            }
+        },
+        messages: {
+            "nombre": {
+                required: "Campo Obligatorio",
+                minlength: "Ingrese bien el nombre", 
+                maxlength: "Tampoco tan largo el nombre"
+            },
+
+            "cedula": {
+                required: "Ingrese su cédula",
+                digits: "Solo se permiten números",
+                minlength: "La cédula debe tener 10 dígitos",
+                maxlength: "La cédula debe tener exactamente 10 dígitos"
+            },
+
+            "direccion": {
+                required: "Ingrese su dirección"
+            },
+
+            "telefono": {
+                required: "Ingrese su celular",
+                digits: "Solo se permiten números",
+                minlength: "El celular debe tener 10 dígitos",
+                maxlength: "El celular debe tener exactamente 10 dígitos",
+                pattern: "El número debe comenzar con 0"
+            }
+        }
+    });
+</script>
+
+
+<script>
+    $("#logo").fileinput({
+        theme: "bootstrap5",  
+        language: "es",
+        allowedFileExtensions: ["jpg", "jpeg", "png"],
+        showUpload: false,
+        dropZoneEnabled: true,
+        maxFileSize: 2000,
+        showPreview: true,
+        browseLabel: "Seleccionar imagen",
+        removeLabel: "Eliminar",
+        initialCaption: "Arrastra y suelta la imagen aquí",
+        showRemove: true,
+        showZoom: true,
+        showDrag: true
+    });
+</script>
+{% endblock %}
