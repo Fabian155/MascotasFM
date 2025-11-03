@@ -1,0 +1,119 @@
+{% extends "plantilla.html" %}
+{% load static %}
+{% block contenido %}
+<h1>LISTADO DE MASCOTAS</h1> <br>
+<a href="nuevaMascota" class="btn btn-primary">
+    AGREGAR UNA NUEVA MASCOTA
+</a>
+<br><br>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  
+
+
+<table class="table table-bordered table-striped table-hover" id="tbl_animales">
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>NOMBRE</td>
+            <td>ESPECIE</td>
+            <td>EDAD</td>
+            <td>SALUD</td>
+            <th>FOTO DEL FIRUALIS</th>
+            <th>ARCHIVO PDF DE LA MASCOTA</th>
+            <th>ACCIONES</th>
+        </tr>
+    </thead>
+        <tbody>
+            {%for Animals in  Animals %}
+                <tr>
+                    <td>{{Animals.id}}</td>
+                    <td>{{Animals.nombre}}</td>
+                    <td>{{Animals.especieid}}</td>
+                    <td>{{Animals.edad}}</td>
+                    <td>{{Animals.salud}}</td>
+                    <td>
+                        {% if Animals.logo %}
+                        <img src="{{Animals.logo.url}}" height="80px" alt="">
+                        {% else %}
+                        Ninguna
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if Animals.pdf %}
+                        <a href="{{ Animals.pdf.url }}" target="_blank">Ver PDF</a>
+                        {% else %}
+                            ninguno
+                        {% endif %}
+                    </td>
+                    
+                    <td>
+                        <a href="{% url 'editarMascota' Animals.id %}" class="btn btn-outline-warning">
+                            <i class="fa fa-pen"></i>
+                        </a>
+                        <a href="#" onclick="confirmarEliminacion({{ Animals.id }})" class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+</table>
+
+<script>
+    $('#tbl_animales').DataTable({
+        dom: 'Bfrtip', // Esto activa los botones arriba de la tabla
+        buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
+        }
+    });
+
+</script>
+
+
+<!-- Incluir SweetAlert2 desde CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // Función para mostrar el mensaje de confirmación antes de eliminar
+    function confirmarEliminacion(id) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    // Redirige a la URL de eliminación después de mostrar el mensaje
+                    window.location.href = "EliminarA/" + id;
+                });
+            }
+        });
+    }
+</script>
+
+    {% if messages %}
+            {% for mensaje in messages %}
+            <script>
+                Swal.fire({
+                    title: "CONFIRMACION",
+                    text: "{{mensaje}}",
+                    icon: "success"
+                })
+            </script>
+            {% endfor %}
+    {% endif %} 
+
+    
+<br><br><br><br><br><br><br><br><br>
+
+{% endblock %}
