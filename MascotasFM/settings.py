@@ -132,3 +132,8 @@ STATICFILES_DIRS=[(os.path.join(BASE_DIR,'MascotasFM/static'))]
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL='/media/'
+
+#va la sistema opetrivo y luega entra a la carpeta media, Basedir=ruta fidica dodne se esta guardando el proyecto
+MEDIA_ROOT=(os.path.join(BASE_DIR,'MascotasFM/media/'))
