@@ -1,0 +1,115 @@
+{% extends "plantilla.html" %}
+{% load static %}
+{%block contenido %}
+
+<div class="col-md-3"></div>
+<div class="col-md-6"></div>
+<h1>EDITAR A LA MASCOTA</h1>
+<form action="{% url 'GuardarEdicion1' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <input type="hidden" name="id" value="{{editarM.id}}"></input>
+    <label for="">Nombre:</label><br>
+    <input class="form-control" type="text" name="nombre" id="nombre" value="{{editarM.nombre}}"> <br>
+    <label for="">Especie:</label><br>
+    <input class="form-control" type="text" name="especieid" id="especieid" value="{{editarM.especieid}}">  <br>
+    <label for="">Edad:</label><br>
+    <input class="form-control" type="text" name="edad" id="edad" value="{{editarM.edad}}">  <br>
+    <label for="">Salud:</label><br>
+    <input class="form-control" type="text" name="salud" id="salud" value="{{editarM.salud}}">  <br>
+
+    <label for="logo">Logotipo:</label><br>
+    {% if editarM.logo %}
+    <img src="{{ editarM.logo.url }}" alt="Logo actual" width="120"><br><br>
+    {% else %}
+    <small>No hay logotipo cargado</small><br><br>
+    {% endif %}
+    <!-- Subir nuevo logotipo -->
+    <input class="form-control" type="file" name="logo" id="logo">
+    <br>
+
+    <!-- Archivo PDF actual -->
+    <label for="pdf">Archivo PDF:</label><br>
+    {% if editarM.pdf %}
+    <a href="{{ editarM.pdf.url }}" target="_blank">Ver PDF actual</a><br><br>
+    {% else %}
+    <small>No hay archivo PDF cargado</small><br><br>
+    {% endif %}
+    <!-- Subir nuevo archivo PDF -->
+    <input class="form-control" type="file" name="pdf" id="pdf" accept="application/pdf">
+    <br>
+
+    <button class="btn btn-success" type="submit">GUARDAR</button>
+    <a class="btn btn-outline-danger" href="/">Cancelar</a>
+
+</form>
+
+<script>
+    $("#frm_nuevaMascota").validate({
+        rules: {
+            "nombre": {
+                required: true,
+                minlength: 3,
+                maxlength: 20
+            },
+
+            "especieid": {
+                required: true,
+                minlength: 3
+            },
+
+            "edad": {
+                required: true,
+                digits: true,
+                min: 0,
+                max: 15
+            },
+
+            "salud": {
+                required: true
+            }
+        },
+        messages: {
+            "nombre": {
+                required: "Campo obligatorio",
+                minlength: "Debe tener al menos 3 letras",
+                maxlength: "Nombre muy largo (máx. 20 caracteres)"
+            },
+
+            "especieid": {
+                required: "Ingrese la especie",
+                minlength: "Debe ingresar una especie válida"
+            },
+
+            "edad": {
+                required: "Ingrese la edad",
+                digits: "Debe ser un número entero",
+                min: "La edad no puede ser negativa",
+                max: "No debe superar los 15 años"
+            },
+
+            "salud": {
+                required: "Ingrese el estado de salud"
+            }
+        }
+    });
+</script>
+
+<script>
+    $("#logo").fileinput({
+        theme: "bootstrap5",  
+        language: "es",
+        allowedFileExtensions: ["jpg", "jpeg", "png"],
+        showUpload: false,
+        dropZoneEnabled: true,
+        maxFileSize: 2000,
+        showPreview: true,
+        browseLabel: "Seleccionar imagen",
+        removeLabel: "Eliminar",
+        initialCaption: "Arrastra y suelta la imagen aquí",
+        showRemove: true,
+        showZoom: true,
+        showDrag: true
+    });
+</script>
+{% endblock %}
