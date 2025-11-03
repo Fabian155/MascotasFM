@@ -33,11 +33,11 @@ def inicioAdmin(request):
     if not request.user.is_authenticated or request.user.role != "ADMIN":
         messages.error(request, "No tienes permiso para acceder a esta página")
         return redirect('login')
-    return render(request, "login/inicioAdmin.html")
+    return render(request, "inicioAdmin.html")
 
 
 def inicioUsuario(request):
     if not request.user.is_authenticated:
         messages.error(request, "Inicia sesión primero")
         return redirect('login')
-    return render(request, "login/inicioUsuario.html")
+    return render(request, "inicioUsuario.html")
