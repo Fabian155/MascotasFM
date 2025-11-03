@@ -1,0 +1,117 @@
+{% extends "plantilla.html" %}
+{% block contenido %}
+<h1>LISTA DE ADOPCIONES</h1> <br>
+<a href="nuevaAdopcion" class="btn btn-primary">
+    AGREGAR UNA RESERVA
+</a>
+<br><br>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  
+
+
+<table class="table table-bordered table-striped table-hover" id="tbl_adopciones">
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>ANIMAL</td>
+            <td>ADOPTANTE</td>
+            <td>FECHA DE ADOPCION</td>
+            <td>PAGO</td>
+            <th>FOTO CON EL PERRO</th>
+            <th>DOCUMENTOS DE LEGALIZACION</th>
+            <th>ACCIONES</th>
+        </tr>
+    </thead>
+        <tbody>
+            {%for adopcion in  adopcion %}
+                <tr>
+                    <td>{{adopcion.id}}</td>
+                    <td>{{adopcion.animal}}</td>
+                    <td>{{adopcion.adoptante}}</td>
+                    <td>{{adopcion.fecha| date:"Y-m-d"}}</td>
+                    <td>{{adopcion.pago}}</td>
+                    <td>
+                        {% if adopcion.logo %}
+                        <img src="{{adopcion.logo.url}}" height="80px" alt="">
+                        {% else %}
+                        Ninguna
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if adopcion.pdf %}
+                        <a href="{{ adopcion.pdf.url }}" target="_blank">Ver PDF</a>
+                        {% else %}
+                            ninguno
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'editarAdopcion' adopcion.id %}" class="btn btn-outline-warning">
+                            <i class="fa fa-pen"></i>
+                        </a>
+                        <a href="#" onclick="confirmarEliminacion({{ adopcion.id }})" class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+</table>
+
+<script>
+        $('#tbl_adopciones').DataTable({
+            paging: true,
+            searching: true,
+            dom: '<"row mb-3"<"col-md-6"B><"col-md-6 text-end"f>>' +
+                '<"row"<"col-12"tr>>' +
+                '<"row mt-3"<"col-md-5"i><"col-md-7"p>>',
+            buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+            }
+        });
+</script>
+
+
+<!-- Incluir SweetAlert2 desde CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // Función para mostrar el mensaje de confirmación antes de eliminar
+    function confirmarEliminacion(id) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    // Redirige a la URL de eliminación después de mostrar el mensaje
+                    window.location.href = "EliminarADOP/" + id;
+                });
+            }
+        });
+    }
+</script>
+
+    {% if messages %}
+            {% for mensaje in messages %}
+            <script>
+                Swal.fire({
+                    title: "CONFIRMACION",
+                    text: "{{mensaje}}",
+                    icon: "success"
+                })
+            </script>
+            {% endfor %}
+    {% endif %} 
+
+<br><br><br><br><br><br><br><br><br>
+
+{% endblock %}
