@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'Aplicaciones.Adoptantes',
     'Aplicaciones.Login',
     'Aplicaciones.Emails',
+    'Aplicaciones.Usuario.AnimalesU',
+    'Aplicaciones.Usuario.AdoptantesU',
+    'Aplicaciones.Usuario.AdopcionU',
 ]
 
 AUTH_USER_MODEL = 'Login.CustomUser'
