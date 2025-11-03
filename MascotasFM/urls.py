@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('Aplicaciones.Login.urls')),
     path('inicioA/', include('Aplicaciones.Animales.urls')),
     path('inicioB/', include('Aplicaciones.Adoptantes.urls')),
+    path('inicioC/', include('Aplicaciones.Adopcion.urls')),
 ]
 
 if settings.DEBUG:
