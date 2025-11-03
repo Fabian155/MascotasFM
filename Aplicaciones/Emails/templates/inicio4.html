@@ -1,0 +1,98 @@
+{% extends "./plantilla.html" %}
+{% block contenido %}
+
+<h1>Mensjes</h1>
+{% if messages %}
+{% for mensaje in messages %}
+<script>
+    Swal.fire({
+        title: "¡Éxito!",
+        text: "{{ mensaje }}",
+        icon: "error"
+    });
+</script>
+{% endfor %}
+{% endif %}
+
+<div class="text-end">
+    <a href="{% url 'nuevoCorreo' %}" class="btn btn-primary">Enviar</a>
+</div>
+
+    
+<!-- para usar let table = new DataTable('#myTable'); debesmo poner id a la tabla -->
+<table class="table table-bordered table-striped table-hover" id="tb">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Dstinatario</th>
+            <th>Asunto</th>
+            <th>Mensaje</th>
+            <th>Fecha</th>
+            <th>Fecha Actualizada</th>
+            <th>Archivo</th>
+            <th>ACCIONES</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for Emails in Emails %}
+        <tr>
+            <td>{{ Emails.id }}</td>
+            <td>{{ Emails.destinatario }}</td>
+            <td>{{ Emails.asunto }}</td>
+            <td>{{ Emails.fecha }}</td>
+            <td>{{ Emails.fechaAct }}</td>
+            <td>{{ Emails.mensaje }}</td>
+            <td>
+                {% if Emails.archivo %}
+                <img src="{{ Emails.archivo.url }}" height="80px" alt="Logo">
+                {% else %}
+                Ninguna
+                {% endif %}
+            </td>
+            <td>
+                <a class="btn btn-warning" href="{% url 'editarM' Emails.id %}">
+                    <i class="fa fa-pen"></i> Editar
+                </a>
+
+                <a href="#" onclick="confirmarEliminacion('{% url 'EliminarCO' Emails.id %}')"
+                    class="btn btn-danger">
+                    <i class="fa fa-trash"></i> Eliminar
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    function confirmarEliminacion(url) {
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "¡No podrás revertir esto!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sí, eliminar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    }
+</script>
+<!-- ahora agregamos este scip que copiamos 
+<script>let table = new DataTable('#tbl_cargos');</script>-->
+<script>
+    $('#tb').DataTable({
+        dom: 'Bfrtip', // Esto activa los botones arriba de la tabla
+        buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
+        }
+    });
+
+</script>
+
+{% endblock %}
