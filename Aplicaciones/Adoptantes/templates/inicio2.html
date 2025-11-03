@@ -1,0 +1,119 @@
+{% extends "plantilla.html" %}
+{% load static %}
+{% block contenido %}
+<h1>LISTADO DE ADOPTANTES</h1> <br>
+<a href="nuevoAdoptado" class="btn btn-primary">
+    AGREGAR UNA NUEVA MIEMBRO
+</a>
+<br><br>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  
+
+
+<table class="table table-bordered table-striped table-hover" id="tbl_adoptantes">
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>NOMBRE</td>
+            <td>CEDULA</td>
+            <td>DIRECCION</td>
+            <td>TELEFONO</td>
+            <th>FOTO DEL ADOPTANTE</th>
+            <th>ARCHIVO PDF DE ANTECEDENTES</th>
+            <th>ACCIONES</th>
+        </tr>
+    </thead>
+        <tbody>
+            {%for Adoptador in  Adoptador %}
+                <tr>
+                    <td>{{Adoptador.id}}</td>
+                    <td>{{Adoptador.nombre}}</td>
+                    <td>{{Adoptador.cedula}}</td>
+                    <td>{{Adoptador.direccion}}</td>
+                    <td>{{Adoptador.telefono}}</td>
+                    <td>
+                        {% if Adoptador.logo %}
+                        <img src="{{Adoptador.logo.url}}" height="80px" alt="">
+                        {% else %}
+                        Ninguna
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if Adoptador.pdf %}
+                        <a href="{{ Adoptador.pdf.url }}" target="_blank">Ver PDF</a>
+                        {% else %}
+                            ninguno
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'editarAdoptado' Adoptador.id %}" class="btn btn-outline-warning">
+                            <i class="fa fa-pen"></i>
+                        </a>
+                        <a href="#" onclick="confirmarEliminacion({{ Adoptador.id }})" class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+</table>
+
+<script>
+        $('#tbl_adoptantes').DataTable({
+            paging: true,
+            searching: true,
+            dom: '<"row mb-3"<"col-md-6"B><"col-md-6 text-end"f>>' +
+                '<"row"<"col-12"tr>>' +
+                '<"row mt-3"<"col-md-5"i><"col-md-7"p>>',
+            buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+            }
+        });
+</script>
+
+
+<!-- Incluir SweetAlert2 desde CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // Función para mostrar el mensaje de confirmación antes de eliminar
+    function confirmarEliminacion(id) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    // Redirige a la URL de eliminación después de mostrar el mensaje
+                    window.location.href = "EliminarAD/" + id;
+                });
+            }
+        });
+    }
+</script>
+
+    {% if messages %}
+            {% for mensaje in messages %}
+            <script>
+                Swal.fire({
+                    title: "CONFIRMACION",
+                    text: "{{mensaje}}",
+                    icon: "success"
+                })
+            </script>
+            {% endfor %}
+    {% endif %} 
+
+    
+<br><br><br><br><br><br><br><br><br>
+
+{% endblock %}
