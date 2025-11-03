@@ -43,7 +43,7 @@
         </td>
 
         <td>
-          <form action="#" method="post" class="d-inline">
+          <form action="{% url 'adopcionu:inicioG' a.id %}" method="post" class="d-inline">
             {% csrf_token %}
             <button type="submit" class="btn btn-primary btn-sm">
               Solicitar adopción

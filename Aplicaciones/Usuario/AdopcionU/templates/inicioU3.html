@@ -1,0 +1,70 @@
+{% extends "plantillaU.html" %}
+{% load static %}
+{% block contenido %}
+
+<h2 class="text-center mb-4">Formulario de Solicitud de Adopción</h2>
+
+<div class="container bg-light p-4 rounded shadow-sm">
+  <form action="" method="post" id="frm_solicitudAdopcion">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label class="form-label"><b>Nombre del animal:</b></label>
+      <input type="text" class="form-control" value="{{ animal.nombre }}" readonly>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label"><b>Especie:</b></label>
+      <input type="text" class="form-control" value="{{ animal.especieid }}" readonly>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label"><b>Motivo de adopción:</b></label>
+      <textarea class="form-control" name="observacion" id="observacion" rows="4"
+        placeholder="Cuéntanos por qué deseas adoptar esta mascota..." required></textarea>
+    </div>
+
+    <div class="text-center">
+      <button class="btn btn-success px-4" type="submit">
+        <i class="fa fa-paw"></i> Enviar Solicitud
+      </button>
+      <a class="btn btn-outline-danger px-4" href="{% url 'animalesu:u_animales' %}">
+        <i class="fa fa-times"></i> Cancelar
+      </a>
+    </div>
+  </form>
+</div>
+
+<script>
+  // ✅ Validaciones del formulario
+  $("#frm_solicitudAdopcion").validate({
+    rules: {
+      "observacion": {
+        required: true,
+        minlength: 10,
+        maxlength: 300
+      }
+    },
+    messages: {
+      "observacion": {
+        required: "Por favor, escribe tu motivo de adopción.",
+        minlength: "Tu mensaje debe tener al menos 10 caracteres.",
+        maxlength: "Tu mensaje no debe exceder los 300 caracteres."
+      }
+    }
+  });
+</script>
+
+{% if messages %}
+  {% for message in messages %}
+    <script>
+      Swal.fire({
+        title: "Notificación",
+        text: "{{ message }}",
+        icon: "success"
+      });
+    </script>
+  {% endfor %}
+{% endif %}
+
+{% endblock %}

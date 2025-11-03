@@ -28,7 +28,8 @@ urlpatterns = [
     path('inicioC/', include('Aplicaciones.Adopcion.urls')),
     path('inicioD/', include('Aplicaciones.Emails.urls')),
     path('usuario/animales/', include('Aplicaciones.Usuario.AnimalesU.urls')),
-    path('usuario/adoptante/', include('Aplicaciones.Usuario.AdoptanteU.urls'))
+    path('usuario/adoptante/', include('Aplicaciones.Usuario.AdoptanteU.urls')),
+    path('usuario/adopcion/', include('Aplicaciones.Usuario.AdopcionU.urls')),
 ]
 
 if settings.DEBUG:
