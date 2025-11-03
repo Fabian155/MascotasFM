@@ -1,0 +1,101 @@
+{% extends "plantilla.html" %}
+{% load static %}
+{%block contenido %}
+
+<div class="col-md-3"></div>
+<div class="col-md-6"></div>
+<h1>EDITAR LA ADOPCION</h1>
+<form action="{% url 'GuardarEdicion3' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <input type="hidden" name="id" value="{{editarADO.id}}"></input>
+    <label>Animales Adoptados:</label><br>
+    <select name="animal">
+        {% for animal in animal %}
+            <option value="{{ animal.id }}" {% if animal.id == editarADO.animal.id %}selected{% endif %}>{{ animal.nombre }}</option>
+        {% endfor %}
+    </select><br><br>
+    <label>Clientes que Adoptaron:</label><br>
+    <select name="adoptante">
+        {% for adoptante in adoptante %}
+            <option value="{{ adoptante.id }}" {% if adoptante.id == editarADO.adoptante.id %}selected{% endif %}>{{ adoptante.nombre }}</option>
+        {% endfor %}
+    </select><br><br>
+    <label for="">Fecha:</label><br>
+    <input class="form-control" type="date" name="fecha" id="fecha" value="{{editarADO.fecha|date:'Y-m-d' }}">  <br>
+    <label for="">Pago:</label><br>
+    <input class="form-control" type="text" name="pago" id="pago" value="{{editarADO.pago}}">  <br>
+
+    <label for="logo">Logotipo:</label><br>
+    {% if editarADO.logo %}
+    <img src="{{ editarADO.logo.url }}" alt="Logo actual" width="120"><br><br>
+    {% else %}
+    <small>No hay logotipo cargado</small><br><br>
+    {% endif %}
+    <!-- Subir nuevo logotipo -->
+    <input class="form-control" type="file" name="logo" id="logo">
+    <br>
+
+    <!-- Archivo PDF actual -->
+    <label for="pdf">Archivo PDF:</label><br>
+    {% if editarADO.pdf %}
+    <a href="{{ editarADO.pdf.url }}" target="_blank">Ver PDF actual</a><br><br>
+    {% else %}
+    <small>No hay archivo PDF cargado</small><br><br>
+    {% endif %}
+    <!-- Subir nuevo archivo PDF -->
+    <input class="form-control" type="file" name="pdf" id="pdf" accept="application/pdf">
+    <br>
+
+    <button class="btn btn-success" type="submit">GUARDAR</button>
+    <a class="btn btn-outline-danger" href="/">Cancelar</a>
+
+</form>
+
+<script>
+    $("#frm_nuevAdopcion").validate({
+        rules: {
+
+            "fecha": {
+                required:true,
+                date:true
+            },
+
+            "pago": {
+                required: true
+            },
+
+        },
+        messages: {
+
+            "fecha": {
+                required: "La fecha de lanzamiento es requerida.",
+                date: "Debe ingresar una fecha válida."
+            },
+
+            "pago": {
+                required: "Ingrese un metodo de pago"
+            },
+            
+        }
+    });
+</script>
+
+<script>
+    $("#logo").fileinput({
+        theme: "bootstrap5",  
+        language: "es",
+        allowedFileExtensions: ["jpg", "jpeg", "png"],
+        showUpload: false,
+        dropZoneEnabled: true,
+        maxFileSize: 2000,
+        showPreview: true,
+        browseLabel: "Seleccionar imagen",
+        removeLabel: "Eliminar",
+        initialCaption: "Arrastra y suelta la imagen aquí",
+        showRemove: true,
+        showZoom: true,
+        showDrag: true
+    });
+</script>
+{% endblock %}
