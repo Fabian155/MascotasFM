@@ -1,0 +1,85 @@
+{% extends "plantilla.html" %}
+{% load static %}
+{% block contenido %}
+
+<h1>AGREGA OTRA ADOPCION</h1>
+<form action="GuardarADO" method="post" id="frm_nuevAdopcion" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <label for="animal">Mascota adoptada:</label><br>
+    <select name="animal" id="animal">
+        {% for animal in animal %}
+        <option value="{{ animal.id }}">{{ animal.nombre }}</option>
+        {% endfor %}
+    </select><br><br>
+    <label for="adoptante">Cliente que Adopto:</label><br>
+    <select name="adoptante" id="adoptante">
+        {% for adoptante in adoptante %}
+        <option value="{{ adoptante.id }}">{{ adoptante.nombre }}</option>
+        {% endfor %}
+    </select><br><br>
+    <label for="">Fecha:</label><br>
+    <input class="form-control" type="date" name="fecha" id="fecha" placeholder="Ingrese la fecha"> <br>
+    <label for="">Pago:</label><br>
+    <input class="form-control" type="text" name="pago" id="pago" placeholder="Ingrese el metodo de pago"> <br>
+    
+
+    <label for="">Foto de la mascota:</label><br>
+    <input class="form-control" type="file" name="logo" id="logo" accept="image/*" placeholder="Sleciones una imagen"><br>
+
+    <label for="pdf">Archivo PDF del Comprobante:</label><br>
+    <input class="form-control" type="file" name="pdf" id="pdf" accept="application/pdf"><br>
+    
+
+    <button class="btn btn-success" type="submit">GUARDAR</button> <br><br>
+    <a class="btn btn-outline-danger" href="/">CANCELAR</a> <br><br>
+
+</form>
+
+<script>
+    $("#frm_nuevAdopcion").validate({
+        rules: {
+
+            "fecha": {
+                required:true,
+                date:true
+            },
+
+            "pago": {
+                required: true
+            },
+
+        },
+        messages: {
+
+            "fecha": {
+                required: "La fecha de lanzamiento es requerida.",
+                date: "Debe ingresar una fecha válida."
+            },
+
+            "pago": {
+                required: "Ingrese un metodo de pago"
+            },
+            
+        }
+    });
+</script>
+
+<script>
+    $("#logo").fileinput({
+        theme: "bootstrap5",  
+        language: "es",
+        allowedFileExtensions: ["jpg", "jpeg", "png"],
+        showUpload: false,
+        dropZoneEnabled: true,
+        maxFileSize: 2000,
+        showPreview: true,
+        browseLabel: "Seleccionar imagen",
+        removeLabel: "Eliminar",
+        initialCaption: "Arrastra y suelta la imagen aquí",
+        showRemove: true,
+        showZoom: true,
+        showDrag: true
+    });
+</script>
+{% endblock %}
