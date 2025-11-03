@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>ANIMAL FRIENDS</title>
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+    <link rel="icon" href="{% static 'plantilla/kaiadmin/assets/img/kaiadmin/favicon.ico' %}" type="image/x-icon" />
+
+    <!-- Fonts and icons -->
+    <script src="{% static 'plantilla/kaiadmin/assets/js/plugin/webfont/webfont.min.js' %}"></script>
+    <script>
+        WebFont.load({
+            google: { families: ["Public Sans:300,400,500,600,700"] },
+            custom: {
+                families: [
+                    "Font Awesome 5 Solid",
+                    "Font Awesome 5 Regular",
+                    "Font Awesome 5 Brands",
+                    "simple-line-icons",
+                ],
+                urls: ["{% static 'plantilla/kaiadmin/assets/css/fonts.min.css' %}"],
+            },
+            active: function () {
+                sessionStorage.fonts = true;
+            },
+        });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{% static  'plantilla/kaiadmin/assets/css/bootstrap.min.css'  %}" />
+    <link rel="stylesheet" href="{% static  'plantilla/kaiadmin/assets/css/plugins.min.css'  %}" />
+    <link rel="stylesheet" href="{% static  'plantilla/kaiadmin/assets/css/kaiadmin.min.css'  %}" />
+
+    <!-- CSS Just for demo purpose -->
+    <link rel="stylesheet" href="{% static 'assets/css/demo.css' %}" />
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+    <!-- jQuery Validation -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="//cdn.datatables.net/2.3.1/css/dataTables.dataTables.min.css">
+    <script src="//cdn.datatables.net/2.3.1/js/dataTables.min.js"></script>
+
+    <!-- Export buttons -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+    <!-- JSZip y PDFMake -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+    <!-- FileInput -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.5.4/js/fileinput.min.js"
+            integrity="sha512-0wQvB58Ha5coWmcgtg4f11CTSSxfrfLClUp9Vy0qhzYzCZDSnoB4Vhu5JXJFs7rU24LE6JsH+6hpP7vQ22lk5w=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.5.4/css/fileinput.min.css"
+          integrity="sha512-yDVMONIXJPPAoULZ92Ygngsn8ZUGB4ejm6fCc6q9ZvdH8blFAOgg75XZSEaAJ5m4E/yPI1BAi5fF2axMHVuZ5w=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #2c3e50, #4ca1af);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Public Sans', sans-serif;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            padding: 40px 30px;
+        }
+
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .footer-login {
+            text-align: center;
+            color: #eee;
+            font-size: 14px;
+            position: absolute;
+            bottom: 15px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background-color: #4ca1af;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #357f8a;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Contenedor del Login -->
+    <div class="login-container">
+        {% block contenido %}
+        {% endblock %}
+    </div>
+
+    <div class="footer-login">
+        <p>© 2024 Animal Friends | Desarrollado por MBUE 🐾</p>
+    </div>
+
+    <!-- Core JS -->
+    <script src="{% static 'plantilla/kaiadmin/assets/js/core/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'plantilla/kaiadmin/assets/js/core/popper.min.js' %}"></script>
+    <script src="{% static 'plantilla/kaiadmin/assets/js/core/bootstrap.min.js' %}"></script>
+
+    <!-- Otros scripts -->
+    <script src="{% static 'plantilla/kaiadmin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
+    <script src="{% static 'plantilla/kaiadmin/assets/js/plugin/chart.js/chart.min.js' %}"></script>
+    <script src="{% static 'plantilla/kaiadmin/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js' %}"></script>
+    <script src="{% static 'plantilla/kaiadmin/assets/js/plugin/chart-circle/circles.min.js' %}"></script>
+    <script src="{% static 'plantilla/kaiadmin/assets/js/plugin/datatables/datatables.min.js' %}"></script>
+    <script src="{% static 'plantilla/kaiadmin/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js' %}"></script>
+    <script src="{% static 'plantilla/kaiadmin/assets/js/plugin/jsvectormap/jsvectormap.min.js' %}"></script>
+    <script src="{% static 'plantilla/kaiadmin/assets/js/plugin/jsvectormap/world.js' %}"></script>
+    <script src="{% static 'plantilla/kaiadmin/assets/js/plugin/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'plantilla/kaiadmin/assets/js/kaiadmin.min.js' %}"></script>
+    <script src="{% static 'plantilla/kaiadmin/assets/js/setting-demo.js' %}"></script>
+    <script src="{% static 'plantilla/kaiadmin/assets/js/demo.js' %}"></script>
+</body>
+</html>
