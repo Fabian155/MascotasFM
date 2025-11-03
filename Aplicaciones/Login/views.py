@@ -21,7 +21,7 @@ def inicioSesion(request):
             messages.error(request, "Usuario o contraseña incorrectos")
             return redirect('login')
 
-    return render(request, "login/login.html")
+    return render(request, "login.html")
 
 
 def cerrarSesion(request):
