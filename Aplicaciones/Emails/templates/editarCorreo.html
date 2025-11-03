@@ -1,0 +1,139 @@
+{% extends "./plantilla.html" %}
+{% block contenido %}
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 bg-light">
+        <h1>Editar Mensjae</h1>
+        <!-- 1. Primeor se debe que todo lo componente tenga id,name ma sinportante id -->
+
+        <form action="{% url 'GuardarEdicion4' %}" method="post" id="frm_nuevoCorreo" enctype="multipart/form-data">
+            <!-- 2.  AGregar id al formualrio nec esario para sabe a quin validar  -->
+            {% csrf_token %}
+            <input type="hidden" name="id" id="id" value="{{EditarM.id}}">
+            <label for="">Destinatario:</label><br>
+            <input class="form-control" type="text" name="destinatario" id="destinatario" placeholder="INgrese DEstinatario" value="{{EditarM.destinatario}}">
+            <br>
+            <label for="">Asunto|:</label><br>
+            <input class="form-control" type="text" name="asunto" id="asunto" value="{{EditarM.asunto}}" placeholder="Ingrse requsitos como experiencia.etc">
+            <br>
+            <label for="">Fecha:</label><br>
+            <input class="form-control" type="date" name="fecha" id="fecha" value="{{EditarM.fecha|date:'Y-m-d'}}" placeholder="Ingrse requsitos como experiencia.etc" readonly>
+            <br>
+            <label for="">Fecha de Actualizacion:</label><br>
+            <input class="form-control" type="date" name="fechaAct" id="fechaAct" value="{{EditarM.fechaAct|date:'Y-m-d'}}" min="{{ hoy }}" placeholder="Ingrese mensaje como .etc">
+            <br>
+            <label for="mensaje">Mensaje:</label><br>
+            <textarea class="form-control" name="mensaje" id="mensaje" rows="4" placeholder="Escribe el mensaje aquí">{{ EditarM.mensaje }}</textarea>
+            <br>
+            <label for="">Archivo:</label><br>
+            <input class="form-control" type="file" name="archivo" id="archivo" accept="image/*" placeholder="Sleciones una imagen" value="{{editarM.archivo.url}}"><br>
+
+            <label for="logo">Logotipo:</label><br>
+            {% if EditarM.archivo %}
+            <img src="{{ EditarM.archivo.url }}" alt="Logo actual" width="120"><br><br>
+            {% else %}
+            <small>No hay logotipo cargado</small><br><br>
+            {% endif %}
+            <!-- Subir nuevo logotipo -->
+            <input class="form-control" type="file" name="archivo" id="archivo">
+            <br>
+            <br>
+            <button class="form-control" type="submit" class="btn btn-success">Guardar</button>
+            <a href="/" class="btn btn-outline-danger">Cancelar</a> <!-- invoca al inicio-->
+        </form>
+
+
+    </div>
+    <div class="col-m-3"></div>
+
+    <!-- 3.  embeber codigo javascript/jquery dentro del html asi s ellam cundo pone un scrip-->
+
+    <script>
+        $("#frm_nuevoCorreo").validate({
+            rules: {
+
+                "destinatario": {
+                    required: true,
+                    minlength: 1, // maxlenth cunrta los caracteres 
+                    maxlength: 100,
+                },
+
+                "asunto": {
+                    required: true
+                },
+
+                "fecha": {
+                    required: true
+                },
+
+                "fechaAct": {
+                    required: true
+                },
+
+                "mensaje": {
+                    required: true
+                },
+
+                "horario": {
+                    required: true
+                },
+
+                "sueldo": {
+                    required: true,
+                    number: true,
+                    min: 200,
+                    max: 5000
+
+                }
+            },
+            messages: {
+                "destinatario": {
+                    required: "Campo Obligatorio",
+                    minlength: "ingresse hasta  1 letras  ", // maxlenth cunrta los caracteres 
+                    maxlength: "SOlo un maximo de 100 letras ",
+                },
+                "asunto": {
+                    required: "Ingrese requistos"
+                },
+
+                "fecha": {
+                    required: "Ingrese la fecha"
+                },
+
+                "fechaAct": {
+                    required: "Ingrese la fecha actualizada"
+                },
+
+                "mensaje": {
+                    required: "INgrese Funciones"
+                },
+
+            }
+        })
+    </script>
+
+
+    <script>
+        $("#archivo").fileinput({
+            language: "es",
+            allowedFileExtensions: ["png", "jpg", "jpeg"],  
+            showCaption: false,
+            dropZoneEnabled: true,
+            showClose: false,
+            showUpload: false
+        });
+    </script>
+
+    <script>
+        $("#pdf").fileinput({
+            language: "es",
+            allowedFileExtensions: ["pdf"],
+            showCaption: false,
+            dropZoneEnabled: true,
+            showClose: false,
+            showUpload: false
+        });
+    </script>
+</div>
+
+{% endblock %}
