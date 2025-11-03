@@ -137,3 +137,11 @@ MEDIA_URL='/media/'
 
 #va la sistema opetrivo y luega entra a la carpeta media, Basedir=ruta fidica dodne se esta guardando el proyecto
 MEDIA_ROOT=(os.path.join(BASE_DIR,'MascotasFM/media/'))
+
+# CONFIGURACION SMTP DE GMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'fabianmartine5678@gmail.com' # Tu correo electrónico
+EMAIL_HOST_PASSWORD = 'ugnyjuynngiuxusr' 
