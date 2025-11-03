@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Aplicaciones.Login.urls')),
     path('inicioA/', include('Aplicaciones.Animales.urls')),
+    path('inicioB/', include('Aplicaciones.Adoptantes.urls')),
 ]
 
 if settings.DEBUG:

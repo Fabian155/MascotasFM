@@ -24,12 +24,12 @@ def GuardarA(request):
 
     nuevoAnimal=AnimalAdoptable.objects.create(nombre=nombre, especieid=especieid, edad=edad, salud=salud, logo=logo, pdf=pdf)
     messages.success(request, "GUARDADO CORRECTA MENTE")
-    return redirect('/')
+    return redirect('inicioA')
 
 def EliminarAnimal(request, id):
     EliminarA=AnimalAdoptable.objects.get(id=id)
     EliminarA.delete()
-    return redirect('/')
+    return redirect('inicioA')
 
 
 def editarMascota(request, id):
@@ -58,5 +58,5 @@ def GuardarEdicion1(request):
         editele.pdf = nuevo_pdf
     editele.save()
     messages.success(request, "Actualizacion correcta")
-    return redirect('/')
+    return redirect('inicioA')
 
