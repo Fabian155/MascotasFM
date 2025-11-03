@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'Aplicaciones.Login',
     'Aplicaciones.Emails',
     'Aplicaciones.Usuario.AnimalesU',
-    'Aplicaciones.Usuario.AdoptantesU',
+    'Aplicaciones.Usuario.AdoptanteU',
     'Aplicaciones.Usuario.AdopcionU',
 ]
 
