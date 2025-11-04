@@ -114,6 +114,10 @@ def actualizar_estado(request, solicitud_id, nuevo_estado):
 
     solicitud.estado = nuevo_estado.upper()  
     solicitud.save()
+    if nuevo_estado.upper() == "APROBADA":
+        animal = solicitud.animal
+        animal.estado = "ADOPTADO"
+        animal.save()
 
     messages.success(request, f"El estado de la solicitud de {solicitud.adoptante.nombre} fue actualizado a {nuevo_estado}.")
     return redirect('lista_solicitudes')

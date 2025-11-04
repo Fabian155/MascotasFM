@@ -5,7 +5,7 @@ from Aplicaciones.Animales.models import AnimalAdoptable
 
 @login_required(login_url='login')
 def lista_animales_u(request):
-    animales = AnimalAdoptable.objects.all().order_by('id')
+    animales = AnimalAdoptable.objects.filter(estado="DISPONIBLE")
     return render(request, 'inicioU1.html', {'animales': animales})
 
 
