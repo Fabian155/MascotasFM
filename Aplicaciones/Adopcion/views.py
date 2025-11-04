@@ -6,7 +6,7 @@ from Aplicaciones.Usuario.AdopcionU.models import SolicitudAdopcion
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Sum
+from django.db.models import Count, F, Sum
 from django.utils import timezone
 import datetime
 
@@ -139,18 +139,20 @@ def aprobar(request, solicitud_id):
 
 @login_required(login_url='login')
 def negociosV(request):
-    # Total de adopciones realizadas
+    # Total de adopciones
     total_adopciones = Adopcion.objects.count()
 
     # Total recaudado (sumando precio de animales adoptados)
-    total_recaudado = Adopcion.objects.aggregate(total=Sum('pago'))['total'] or 0
+    total_recaudado = Adopcion.objects.aggregate(total=Sum(F('animal__precio')))['total'] or 0
 
-    # Conteo de animales por estado
+    # Importar modelo AnimalAdoptable
     from Aplicaciones.Animales.models import AnimalAdoptable
-    estado_animales = AnimalAdoptable.objects.values('estado').annotate(total=Count('id'))
 
-    # Adopciones por mes
-    adopciones_por_mes = (
+    # Convertir QuerySet a lista para JSON
+    estado_animales = list(AnimalAdoptable.objects.values('estado').annotate(total=Count('id')))
+
+    # Adopciones agrupadas por fecha (convertidas a lista también)
+    adopciones_por_mes = list(
         Adopcion.objects
         .values('fecha')
         .annotate(total=Count('id'))
@@ -163,6 +165,7 @@ def negociosV(request):
         'estado_animales': estado_animales,
         'adopciones_por_mes': adopciones_por_mes,
     })
+
 
 
 

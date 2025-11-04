@@ -14,7 +14,7 @@
     <div class="col-md-4">
       <div class="card shadow-sm p-3">
         <h5>Total Recaudado</h5>
-        <h3 class="text-success">${{ total_recaudado }}</h3>
+        <h3 class="text-success">${{ total_recaudado|floatformat:2 }}</h3>
       </div>
     </div>
   </div>
@@ -23,11 +23,11 @@
 
   <div class="row">
     <div class="col-md-6">
-      <h5>🐾 Adopciones por Mes</h5>
+      <h5> Adopciones por Mes</h5>
       <canvas id="chartAdopcionesMes"></canvas>
     </div>
     <div class="col-md-6">
-      <h5>📦 Estado de las Mascotas</h5>
+      <h5> Estado de las Mascotas</h5>
       <canvas id="chartEstadoAnimales"></canvas>
     </div>
   </div>
@@ -36,43 +36,65 @@
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
-  // Datos desde Django
-  const adopcionesPorMes = JSON.parse('{{ adopciones_por_mes|safe|escapejs }}');
-  const estadoAnimales = JSON.parse('{{ estado_animales|safe|escapejs }}');
+<!-- Sección para pasar los datos de Django a JavaScript -->
+{{ adopciones_por_mes|json_script:"adopciones-data" }}
+{{ estado_animales|json_script:"estado-data" }}
 
-  // Gráfica 1 - Adopciones por mes
+<script>
+  // 🔹 Recuperar datos desde los scripts generados
+  const adopcionesPorMes = JSON.parse(document.getElementById('adopciones-data').textContent);
+  const estadoAnimales = JSON.parse(document.getElementById('estado-data').textContent);
+
+  // 🔹 Gráfico 1: Adopciones por mes (barras)
   const ctx1 = document.getElementById('chartAdopcionesMes').getContext('2d');
   const meses = adopcionesPorMes.map(item => item.fecha);
   const totales = adopcionesPorMes.map(item => item.total);
+
   new Chart(ctx1, {
     type: 'bar',
     data: {
       labels: meses,
       datasets: [{
-        label: 'Adopciones',
+        label: 'Cantidad de Adopciones',
         data: totales,
         backgroundColor: 'rgba(54, 162, 235, 0.6)',
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1
       }]
     },
-    options: { scales: { y: { beginAtZero: true } } }
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Número de Adopciones' }
+        },
+        x: { title: { display: true, text: 'Fecha' } }
+      }
+    }
   });
 
+  // 🔹 Gráfico 2: Estado de las mascotas (dona)
   const ctx2 = document.getElementById('chartEstadoAnimales').getContext('2d');
   const labels2 = estadoAnimales.map(item => item.estado);
   const values2 = estadoAnimales.map(item => item.total);
+
   new Chart(ctx2, {
     type: 'doughnut',
     data: {
       labels: labels2,
       datasets: [{
         data: values2,
-        backgroundColor: ['#4CAF50', '#9E9E9E'],
+        backgroundColor: ['#4CAF50', '#FFC107', '#9E9E9E', '#2196F3'],
+        borderWidth: 1
       }]
     },
-    options: { responsive: true }
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' },
+        title: { display: false }
+      }
+    }
   });
 </script>
 {% endblock %}
