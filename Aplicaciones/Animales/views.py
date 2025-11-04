@@ -21,8 +21,10 @@ def GuardarA(request):
 
     logo=request.FILES.get("logo")
     pdf = request.FILES.get("pdf")
+    precio=request.POST.get("precio", 0)
+    estado=request.POST.get("estado", "DISPONIBLE")
 
-    nuevoAnimal=AnimalAdoptable.objects.create(nombre=nombre, especieid=especieid, edad=edad, salud=salud, logo=logo, pdf=pdf)
+    nuevoAnimal=AnimalAdoptable.objects.create(nombre=nombre, especieid=especieid, edad=edad, salud=salud, logo=logo, pdf=pdf, precio=precio, estado=estado)
     messages.success(request, "GUARDADO CORRECTA MENTE")
     return redirect('inicioA')
 
@@ -46,6 +48,8 @@ def GuardarEdicion1(request):
     editele=AnimalAdoptable.objects.get(id=id)
     nuevo_logo = request.FILES.get("logo")
     nuevo_pdf = request.FILES.get("pdf")
+    precio=request.POST.get("precio", editele.precio)
+    estado=request.POST.get("estado", editele.estado)
 
     editele.nombre=nombre
     editele.especieid=especieid
@@ -56,6 +60,8 @@ def GuardarEdicion1(request):
         editele.logo = nuevo_logo
     if nuevo_pdf:
         editele.pdf = nuevo_pdf
+    editele.precio=precio
+    editele.estado=estado
     editele.save()
     messages.success(request, "Actualizacion correcta")
     return redirect('inicioA')

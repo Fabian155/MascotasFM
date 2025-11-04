@@ -19,6 +19,8 @@
             <td>SALUD</td>
             <th>FOTO DEL FIRUALIS</th>
             <th>ARCHIVO PDF DE LA MASCOTA</th>
+            <th>PRECIO</th>
+            <th>ESTADO</th>
             <th>ACCIONES</th>
         </tr>
     </thead>
@@ -43,6 +45,16 @@
                         <a href="{{ Animals.pdf.url }}" target="_blank">Ver PDF</a>
                         {% else %}
                             ninguno
+                        {% endif %}
+                    </td>
+                    <td>{{Animals.precio}}</td>
+                    <td>
+                        {% if Animals.estado == "DISPONIBLE" %}
+                        <span class="badge bg-success">DISPONIBLE</span>
+                        {% elif Animals.estado == "ADOPTADO" %}
+                        <span class="badge bg-secondary">ADOPTADO</span>
+                        {% else %}
+                        <span class="badge bg-light text-dark">{{ Animals.estado }}</span>
                         {% endif %}
                     </td>
                     
