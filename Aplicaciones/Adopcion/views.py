@@ -6,6 +6,9 @@ from Aplicaciones.Usuario.AdopcionU.models import SolicitudAdopcion
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Sum
+from django.utils import timezone
+import datetime
 
 # Create your views here.
 
@@ -133,6 +136,33 @@ def aprobar(request, solicitud_id):
         messages.info(request, "Esta solicitud ya fue aprobada.")
         return redirect('lista_solicitudes')
     return redirect(f"/inicioC/nuevaAdopcion?solicitud_id={solicitud.id}")
+
+@login_required(login_url='login')
+def negociosV(request):
+    # Total de adopciones realizadas
+    total_adopciones = Adopcion.objects.count()
+
+    # Total recaudado (sumando precio de animales adoptados)
+    total_recaudado = Adopcion.objects.aggregate(total=Sum('pago'))['total'] or 0
+
+    # Conteo de animales por estado
+    from Aplicaciones.Animales.models import AnimalAdoptable
+    estado_animales = AnimalAdoptable.objects.values('estado').annotate(total=Count('id'))
+
+    # Adopciones por mes
+    adopciones_por_mes = (
+        Adopcion.objects
+        .values('fecha')
+        .annotate(total=Count('id'))
+        .order_by('fecha')
+    )
+
+    return render(request, 'Negocios.html', {
+        'total_adopciones': total_adopciones,
+        'total_recaudado': total_recaudado,
+        'estado_animales': estado_animales,
+        'adopciones_por_mes': adopciones_por_mes,
+    })
 
 
 
