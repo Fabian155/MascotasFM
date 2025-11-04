@@ -15,9 +15,28 @@ def inicio3(request):
 
 
 def nuevaAdopcion(request):
-    animal=AnimalAdoptable.objects.all()
-    adoptante=Adoptante.objects.all()
-    return render(request, "nuevaAdopcion.html", {'animal': animal, 'adoptante': adoptante})
+    solicitud_id = request.GET.get('solicitud_id')
+    solicitud = None
+    animal = None
+    adoptante = None
+
+    if solicitud_id:
+        solicitud = get_object_or_404(SolicitudAdopcion, id=solicitud_id)
+        animal = solicitud.animal
+        adoptante = solicitud.adoptante
+
+    # Cargas para selects
+    animales = AnimalAdoptable.objects.all()
+    adoptantes = Adoptante.objects.all()
+
+    return render(request, "nuevaAdopcion.html", {
+        'animal': animales,            
+        'adoptante': adoptantes,      
+        'solicitud_prefill': solicitud, 
+        'animal_prefill': animal,
+        'adoptante_prefill': adoptante,
+    })
+
 
 def GuardarADO(request):
     animal_id=request.POST["animal"]
@@ -30,9 +49,24 @@ def GuardarADO(request):
     logo=request.FILES.get("logo")
     pdf = request.FILES.get("pdf")
 
-    nuevaAdop=Adopcion.objects.create(animal=animal, adoptante=adoptante, fecha=fecha, pago=pago, logo=logo, pdf=pdf)
-    messages.success(request, "GUARDADO CORRECTAMENTE")
+    nuevaAdop=Adopcion.objects.create(
+        animal=animal, adoptante=adoptante, fecha=fecha, pago=pago, logo=logo, pdf=pdf
+    )
+
+    solicitud_id = request.POST.get("solicitud_id")
+    if solicitud_id:
+        try:
+            solicitud = SolicitudAdopcion.objects.get(id=solicitud_id)
+            solicitud.estado = "APROBADA"
+            solicitud.save()
+        except SolicitudAdopcion.DoesNotExist:
+            pass
+
+    messages.success(request, "GUARDADO CORRECTAMENTE Y SOLICITUD APROBADA.")
     return redirect('inicioC')
+ 
+
+
 
 def EliminarAdopcion(request, id):
     EliminarADOP=Adopcion.objects.get(id=id)
@@ -78,11 +112,24 @@ def lista_solicitudes(request):
 def actualizar_estado(request, solicitud_id, nuevo_estado):
     solicitud = get_object_or_404(SolicitudAdopcion, id=solicitud_id)
 
-    solicitud.estado = nuevo_estado.upper()  # Aprobada / Rechazada / Pendiente
+    solicitud.estado = nuevo_estado.upper()  
     solicitud.save()
 
     messages.success(request, f"El estado de la solicitud de {solicitud.adoptante.nombre} fue actualizado a {nuevo_estado}.")
-    return redirect('adopcion:lista_solicitudes')
+    return redirect('lista_solicitudes')
+
+def aprobar(request, solicitud_id):
+    """
+    Lleva al formulario de nueva adopción con la solicitud indicada.
+    Pasamos solicitud_id por querystring para precargar adoptante/animal.
+    """
+    solicitud = get_object_or_404(SolicitudAdopcion, id=solicitud_id)
+
+    if solicitud.estado.upper() == 'APROBADA':
+        messages.info(request, "Esta solicitud ya fue aprobada.")
+        return redirect('lista_solicitudes')
+    return redirect(f"/inicioC/nuevaAdopcion?solicitud_id={solicitud.id}")
+
 
 
 

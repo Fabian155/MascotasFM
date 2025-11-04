@@ -34,7 +34,7 @@
         {% endif %}
       </td>
       <td>
-        <a href="{% url 'actualizar_estado' s.id 'APROBADA' %}" class="btn btn-success btn-sm">Aprobar</a>
+        <a href="{% url 'aprobar' s.id %}" class="btn btn-success btn-sm">Aprobar</a>
         <a href="{% url 'actualizar_estado' s.id 'RECHAZADA' %}" class="btn btn-danger btn-sm">Rechazar</a>
         <a href="{% url 'actualizar_estado' s.id 'PENDIENTE' %}" class="btn btn-warning btn-sm text-dark">Pendiente</a>
       </td>

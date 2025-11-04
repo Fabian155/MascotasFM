@@ -5,6 +5,10 @@
 <h1>AGREGA OTRA ADOPCION</h1>
 <form action="GuardarADO" method="post" id="frm_nuevAdopcion" enctype="multipart/form-data">
     {% csrf_token %}
+    {% if solicitud_prefill %}
+    <input type="hidden" name="solicitud_id" value="{{ solicitud_prefill.id }}">
+    {% endif %}
+
     
     <label for="animal">Mascota adoptada:</label><br>
     <select name="animal" id="animal">
