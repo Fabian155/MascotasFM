@@ -10,6 +10,8 @@ class Adoptante(models.Model):
     cedula = models.TextField()
     direccion = models.TextField()
     telefono = models.TextField()
+    correo = models.EmailField(max_length=254, null=True, blank=True)   
+    password = models.CharField(max_length=128, null=True, blank=True)
 
     logo = models.FileField(
         upload_to='cargos',  

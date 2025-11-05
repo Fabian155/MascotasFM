@@ -17,6 +17,8 @@
             <td>CEDULA</td>
             <td>DIRECCION</td>
             <td>TELEFONO</td>
+            <td>CORREO</td>
+            <td>CONTRASEÑA</td>
             <th>FOTO DEL ADOPTANTE</th>
             <th>ARCHIVO PDF DE ANTECEDENTES</th>
             <th>ACCIONES</th>
@@ -30,6 +32,8 @@
                     <td>{{Adoptador.cedula}}</td>
                     <td>{{Adoptador.direccion}}</td>
                     <td>{{Adoptador.telefono}}</td>
+                    <td>{{Adoptador.correo}}</td>
+                    <td>{{Adoptador.password}}</td>
                     <td>
                         {% if Adoptador.logo %}
                         <img src="{{Adoptador.logo.url}}" height="80px" alt="">

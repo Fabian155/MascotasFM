@@ -18,11 +18,13 @@ def GuardarAD(request):
     cedula=request.POST["cedula"]
     direccion=request.POST["direccion"]
     telefono=request.POST["telefono"]
+    correo=request.POST["correo"]
+    password=request.POST["password"]
 
     logo=request.FILES.get("logo")
     pdf = request.FILES.get("pdf")
 
-    nuevoAdoptan=Adoptante.objects.create(nombre=nombre, cedula=cedula, direccion=direccion, telefono=telefono, logo=logo, pdf=pdf)
+    nuevoAdoptan=Adoptante.objects.create(nombre=nombre, cedula=cedula, direccion=direccion, telefono=telefono, correo=correo, password=password , logo=logo, pdf=pdf)
     messages.success(request, "GUARDADO CORRECTAMENTE")
     return redirect('inicioB')
 
@@ -41,7 +43,9 @@ def GuardarEdicion2(request):
     nombre=request.POST["nombre"]
     cedula=request.POST["cedula"]
     direccion=request.POST["direccion"]
-    telefono=request.POST["telefono"].replace(',','.')
+    telefono=request.POST["telefono"]
+    correo=request.POST["correo"]
+    password=request.POST["password"].replace(',','.')
 
     edital=Adoptante.objects.get(id=id)
     nuevo_logo = request.FILES.get("logo")
@@ -51,6 +55,8 @@ def GuardarEdicion2(request):
     edital.cedula=cedula
     edital.direccion=direccion
     edital.telefono=telefono
+    edital.correo=correo
+    edital.password=password
     
     if nuevo_logo:
         edital.logo = nuevo_logo

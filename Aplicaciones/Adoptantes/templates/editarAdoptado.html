@@ -17,6 +17,10 @@
     <input class="form-control" type="text" name="direccion" id="direccion" value="{{editarA.direccion}}">  <br>
     <label for="">Telefono:</label><br>
     <input class="form-control" type="text" name="telefono" id="telefono" value="{{editarA.telefono}}">  <br>
+    <label for="">Correo:</label><br>
+    <input class="form-control" type="text" name="correo" id="correo" value="{{editarA.correo}}">  <br>
+    <label for="">Contraseña:</label><br>
+    <input class="form-control" type="text" name="password" id="password" value="{{editarA.password}}">  <br>
 
     <label for="logo">Logotipo:</label><br>
     {% if editarA.logo %}
@@ -70,7 +74,15 @@
                 minlength: 10,
                 maxlength: 10,
                 pattern: /^0\d{9}$/
-            }
+            },
+
+            "correo": {
+                required: true
+            },
+
+            "password": {
+                required: true
+            },
         },
         messages: {
             "nombre": {
@@ -96,7 +108,15 @@
                 minlength: "El celular debe tener 10 dígitos",
                 maxlength: "El celular debe tener exactamente 10 dígitos",
                 pattern: "El número debe comenzar con 0"
-            }
+            },
+
+            "correo": {
+                required: "Ingrese bien su correo"
+            },
+
+            "password": {
+                required: "Ingrese su contraseña"
+            },
         }
     });
 </script>
