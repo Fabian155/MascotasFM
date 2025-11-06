@@ -139,19 +139,9 @@ def aprobar(request, solicitud_id):
 
 @login_required(login_url='login')
 def negociosV(request):
-    # Total de adopciones
     total_adopciones = Adopcion.objects.count()
-
-    # Total recaudado (sumando precio de animales adoptados)
     total_recaudado = Adopcion.objects.aggregate(total=Sum(F('animal__precio')))['total'] or 0
-
-    # Importar modelo AnimalAdoptable
-    from Aplicaciones.Animales.models import AnimalAdoptable
-
-    # Convertir QuerySet a lista para JSON
     estado_animales = list(AnimalAdoptable.objects.values('estado').annotate(total=Count('id')))
-
-    # Adopciones agrupadas por fecha (convertidas a lista también)
     adopciones_por_mes = list(
         Adopcion.objects
         .values('fecha')

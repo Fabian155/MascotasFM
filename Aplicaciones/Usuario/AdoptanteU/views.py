@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from Aplicaciones.Adoptantes.models import Adoptante  # Importamos el modelo del admin
+from Aplicaciones.Login.models import Registrar
+from Aplicaciones.Adoptantes.models import Adoptante
 
 
 @login_required(login_url='login')
@@ -13,17 +14,30 @@ def formulario_adoptante(request):
         telefono = request.POST.get("telefono")
         logo = request.FILES.get("logo")
         pdf = request.FILES.get("pdf")
+        usuario_id = request.session.get("usuario_id")
+        if not usuario_id:
+            messages.error(request, "Debes iniciar sesión para registrar tus datos.")
+            return redirect('login')
+
+        registro = Registrar.objects.filter(id=usuario_id).first()
+        if not registro:
+            messages.error(request, "No se encontró tu cuenta. Inicia sesión nuevamente.")
+            return redirect('login')
+        if Adoptante.objects.filter(registro=registro).exists():
+            messages.warning(request, "Ya tienes un registro de adoptante.")
+            return redirect('animalesu:u_animales')
 
         Adoptante.objects.create(
+            registro=registro,
             nombre=nombre,
             cedula=cedula,
             direccion=direccion,
             telefono=telefono,
-            logo=logo,   
-            pdf=pdf      
+            logo=logo,
+            pdf=pdf
         )
 
-        messages.success(request, "Tus datos se registraron correctamente.")
-        return redirect('adoptanteu:inicioF')
+        messages.success(request, "Tus datos se registraron correctamente. Ya puedes adoptar mascotas.")
+        return redirect('animalesu:u_animales')
 
     return render(request, 'inicioU2.html')

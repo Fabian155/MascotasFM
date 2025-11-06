@@ -8,16 +8,18 @@ from Aplicaciones.Animales.models import AnimalAdoptable
 
 @login_required(login_url='login')
 def solicitarA(request, animal_id):
+    usuario_id = request.session.get("usuario_id")  # ID del usuario en sesión
     animal = get_object_or_404(AnimalAdoptable, id=animal_id)
+    adoptante = Adoptante.objects.filter(registro_id=usuario_id).first()
+
+    if not adoptante:
+        messages.warning(request, "Antes de solicitar una adopción, completa tu registro de adoptante.")
+        return redirect('adoptanteu:inicioF')
 
     if request.method == 'GET':
         return render(request, 'inicioU3.html', {'animal': animal})
-    observacion = request.POST.get('observacion', '').strip()
 
-    if not Adoptante.objects.exists():
-        messages.warning(request, "Debes registrar tus datos antes de solicitar una adopción.")
-        return redirect('adoptanteu:inicioF')
-    adoptante = Adoptante.objects.latest('id')
+    observacion = request.POST.get('observacion', '').strip()
 
     SolicitudAdopcion.objects.create(
         adoptante=adoptante,
@@ -30,12 +32,17 @@ def solicitarA(request, animal_id):
 
 
 
+
+
 @login_required(login_url='login')
 def historial(request):
-    """
-    Muestra todas las solicitudes del usuario actual.
-    Si más adelante enlazas usuarios con adoptantes,
-    aquí se puede filtrar por el adoptante que pertenece al usuario logueado.
-    """
-    solicitudes = SolicitudAdopcion.objects.all().order_by('-fecha_solicitud')
+    usuario = request.user
+    adoptante = Adoptante.objects.filter(usuario=usuario).first()
+
+    if not adoptante:
+        messages.warning(request, "Aún no tienes registro de adoptante.")
+        return redirect('adoptanteu:inicioF')
+
+    solicitudes = SolicitudAdopcion.objects.filter(adoptante=adoptante).order_by('-fecha_solicitud')
     return render(request, 'historialU.html', {'solicitudes': solicitudes})
+

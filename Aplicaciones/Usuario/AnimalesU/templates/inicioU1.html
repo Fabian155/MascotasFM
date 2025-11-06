@@ -4,6 +4,16 @@
 
 <h2 class="mb-3">Mascotas disponibles</h2>
 
+{% if not tiene_perfil_adoptante %}
+  <div class="alert alert-warning d-flex justify-content-between align-items-center">
+    <div>
+      ⚠️ Antes de adoptar, por favor completa tu
+      <a href="{% url 'nuevoAdoptado' %}"><strong>registro de adoptante</strong></a>.
+    </div>
+    <a href="{% url 'nuevoAdoptado' %}" class="btn btn-outline-warning btn-sm">Completar registro</a>
+  </div>
+{% endif %}
+
 <table class="table table-bordered table-striped table-hover" id="tbl_animales_u">
   <thead>
     <tr>

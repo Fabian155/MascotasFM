@@ -1,4 +1,5 @@
 from django.db import models
+from Aplicaciones.Login.models import Registrar
 
 # Create your models here.
 
@@ -6,12 +7,11 @@ from django.db import models
 
 class Adoptante(models.Model):
     id = models.AutoField(primary_key=True)
+    registro = models.OneToOneField(Registrar, on_delete=models.CASCADE, null=True, blank=True)
     nombre = models.TextField()
     cedula = models.TextField()
     direccion = models.TextField()
     telefono = models.TextField()
-    correo = models.EmailField(max_length=254, null=True, blank=True)   
-    password = models.CharField(max_length=128, null=True, blank=True)
 
     logo = models.FileField(
         upload_to='cargos',  
