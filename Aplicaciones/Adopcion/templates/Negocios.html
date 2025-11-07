@@ -41,11 +41,11 @@
 {{ estado_animales|json_script:"estado-data" }}
 
 <script>
-  // 🔹 Recuperar datos desde los scripts generados
+  
   const adopcionesPorMes = JSON.parse(document.getElementById('adopciones-data').textContent);
   const estadoAnimales = JSON.parse(document.getElementById('estado-data').textContent);
 
-  // 🔹 Gráfico 1: Adopciones por mes (barras)
+  
   const ctx1 = document.getElementById('chartAdopcionesMes').getContext('2d');
   const meses = adopcionesPorMes.map(item => item.fecha);
   const totales = adopcionesPorMes.map(item => item.total);
@@ -73,7 +73,7 @@
     }
   });
 
-  // 🔹 Gráfico 2: Estado de las mascotas (dona)
+  
   const ctx2 = document.getElementById('chartEstadoAnimales').getContext('2d');
   const labels2 = estadoAnimales.map(item => item.estado);
   const values2 = estadoAnimales.map(item => item.total);

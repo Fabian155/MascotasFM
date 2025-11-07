@@ -15,18 +15,18 @@ def formulario_adoptante(request):
         logo = request.FILES.get("logo")
         pdf = request.FILES.get("pdf")
 
-        # 🔹 Obtener el usuario logueado (de la tabla Registrar)
+        
         usuario_id = request.session.get("usuario_id")
         registro = Registrar.objects.filter(id=usuario_id).first() if usuario_id else None
 
-        # 🔹 Verificar si ya tiene ficha de adoptante
+        
         if registro and Adoptante.objects.filter(registro=registro).exists():
             messages.warning(request, "Ya tienes un registro de adoptante.")
             return redirect('animalesu:u_animales')
 
-        # 🔹 Crear el adoptante y vincularlo al usuario
+        
         Adoptante.objects.create(
-            registro=registro,   # 👈 aquí está la diferencia
+            registro=registro,  
             nombre=nombre,
             cedula=cedula,
             direccion=direccion,
