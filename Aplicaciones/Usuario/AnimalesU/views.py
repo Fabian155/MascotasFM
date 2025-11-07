@@ -28,3 +28,6 @@ def lista_animales_u(request):
 def detalle_animal_u(request, id):
     animal = get_object_or_404(AnimalAdoptable, id=id)
     return render(request, 'usuario/animales/detalle.html', {'animal': animal})
+
+
+

@@ -22,11 +22,14 @@ def solicitarA(request, animal_id):
 
     observacion = request.POST.get('observacion', '').strip()
 
+    registro_id = request.session.get("usuario_id")
     SolicitudAdopcion.objects.create(
         adoptante=adoptante,
         animal=animal,
+        registro_id=registro_id,  
         observacion=observacion
-    )
+)
+
 
     messages.success(request, f"Has solicitado adoptar a {animal.nombre}. Espera la respuesta del administrador.")
     return redirect('animalesu:u_animales')
@@ -35,18 +38,17 @@ def solicitarA(request, animal_id):
 
 
 
-@login_required(login_url='login')
 def historial(request):
-    correo_usuario = request.session.get('correo')
-
-    if not correo_usuario:
+    usuario_id = request.session.get("usuario_id")
+    if not usuario_id:
         messages.warning(request, "Debes iniciar sesión para acceder a tu historial.")
         return redirect('login')
-    registro_usuario = Registrar.objects.filter(correo=correo_usuario).first()
 
+    registro_usuario = Registrar.objects.filter(id=usuario_id).first()
     if not registro_usuario:
         messages.error(request, "No se encontró tu cuenta registrada en el sistema.")
         return redirect('login')
+
     solicitudes = SolicitudAdopcion.objects.filter(registro=registro_usuario).order_by('-fecha_solicitud')
 
     if not solicitudes.exists():
