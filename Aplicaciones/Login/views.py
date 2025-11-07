@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Registrar  # 🔹 nuevo modelo de usuarios registrados
+from .models import Registrar  
 
 
 def inicioSesion(request):
@@ -13,13 +13,12 @@ def inicioSesion(request):
         try:
             usuario = Registrar.objects.get(correo=correo)
 
-            # Verificamos la contraseña hasheada
+           
             if check_password(clave, usuario.contraseña):
-                # Guardamos los datos en la sesión manualmente
                 request.session["usuario_id"] = usuario.id
                 request.session["usuario_nombre"] = usuario.nombre
                 request.session["usuario_correo"] = usuario.correo
-                messages.success(request, f"Bienvenido, {usuario.nombre} 👋")
+                messages.success(request, f"Bienvenido, {usuario.nombre} ")
                 return redirect("inicioUsuario")
 
             else:

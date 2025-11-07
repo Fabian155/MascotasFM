@@ -4,11 +4,12 @@ from django.contrib.auth.decorators import login_required
 from Aplicaciones.Usuario.AdopcionU.models import SolicitudAdopcion
 from Aplicaciones.Adoptantes.models import Adoptante
 from Aplicaciones.Animales.models import AnimalAdoptable
+from Aplicaciones.Login.models import Registrar
 
 
 @login_required(login_url='login')
 def solicitarA(request, animal_id):
-    usuario_id = request.session.get("usuario_id")  # ID del usuario en sesión
+    usuario_id = request.session.get("usuario_id")  
     animal = get_object_or_404(AnimalAdoptable, id=animal_id)
     adoptante = Adoptante.objects.filter(registro_id=usuario_id).first()
 
@@ -36,13 +37,26 @@ def solicitarA(request, animal_id):
 
 @login_required(login_url='login')
 def historial(request):
-    usuario = request.user
-    adoptante = Adoptante.objects.filter(usuario=usuario).first()
+    correo_usuario = request.session.get('correo')
 
-    if not adoptante:
-        messages.warning(request, "Aún no tienes registro de adoptante.")
-        return redirect('adoptanteu:inicioF')
+    if not correo_usuario:
+        messages.warning(request, "Debes iniciar sesión para acceder a tu historial.")
+        return redirect('login')
+    registro_usuario = Registrar.objects.filter(correo=correo_usuario).first()
 
-    solicitudes = SolicitudAdopcion.objects.filter(adoptante=adoptante).order_by('-fecha_solicitud')
+    if not registro_usuario:
+        messages.error(request, "No se encontró tu cuenta registrada en el sistema.")
+        return redirect('login')
+    solicitudes = SolicitudAdopcion.objects.filter(registro=registro_usuario).order_by('-fecha_solicitud')
+
+    if not solicitudes.exists():
+        messages.info(request, "Aún no tienes solicitudes de adopción registradas.")
+
     return render(request, 'historialU.html', {'solicitudes': solicitudes})
+
+
+
+
+
+
 

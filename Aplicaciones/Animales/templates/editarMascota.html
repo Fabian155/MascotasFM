@@ -39,7 +39,7 @@
     <input class="form-control" type="file" name="pdf" id="pdf" accept="application/pdf">
     <br>
     <label for="precio">Precio:</label><br>
-    <input class="form-control" type="text" name="precio" id="precio" value="{{ editarA.precio|default:'0.00' }}"><br>
+    <input class="form-control" type="text" name="precio" id="precio" step="0.01" value="{{ editarM.precio }}"><br>
 
 
     <label for="estado">Estado:</label><br>
@@ -49,7 +49,7 @@
     </select><br>
 
     <button class="btn btn-success" type="submit">GUARDAR</button>
-    <a class="btn btn-outline-danger" href="/">Cancelar</a>
+    <a class="btn btn-outline-danger" href="{% url 'inicioA' %}">Cancelar</a>
 
 </form>
 

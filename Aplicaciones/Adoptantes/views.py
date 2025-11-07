@@ -15,10 +15,6 @@ def nuevoAdoptado(request):
     return render(request, "nuevoAdoptado.html")
 
 def GuardarAD(request):
-    registro_id = request.session.get("usuario_id")  # <-- obtienes el id guardado en la sesión
-    registro = None
-    if registro_id:
-        registro = Registrar.objects.filter(id=registro_id).first()
     nombre=request.POST["nombre"]
     cedula=request.POST["cedula"]
     direccion=request.POST["direccion"]
@@ -26,16 +22,7 @@ def GuardarAD(request):
 
     logo=request.FILES.get("logo")
     pdf = request.FILES.get("pdf")
-
-    if not registro:
-        from django.contrib import messages
-        messages.warning(request, "Debes iniciar sesión para registrar tus datos de adoptante.")
-        return redirect('login')
-    if Adoptante.objects.filter(registro=registro).exists():
-        messages.warning(request, "Ya tienes tu ficha de adoptante registrada.")
-        return redirect('inicioUsuario')
-
-    nuevoAdoptan=Adoptante.objects.create(registro=registro,nombre=nombre, cedula=cedula, direccion=direccion, telefono=telefono,  logo=logo, pdf=pdf)
+    nuevoAdoptan=Adoptante.objects.create(nombre=nombre, cedula=cedula, direccion=direccion, telefono=telefono,  logo=logo, pdf=pdf)
     messages.success(request, "GUARDADO CORRECTAMENTE")
     return redirect('inicioB')
 

@@ -22,7 +22,7 @@
     <input class="form-control" type="file" name="pdf" id="pdf" accept="application/pdf"><br>
 
     <label for="precio">Precio:</label><br>
-    <input class="form-control" type="text" name="precio" id="precio" placeholder="Ingrese el precio de la mascota"><br>
+    <input class="form-control" type="text" name="precio" id="precio" step="0.01" placeholder="Ingrese el precio de la mascota"><br>
 
 
     <label for="">Estado:</label><br>
@@ -33,7 +33,7 @@
     
 
     <button class="btn btn-success" type="submit">GUARDAR</button> <br><br>
-    <a class="btn btn-outline-danger" href="/">CANCELAR</a> <br><br>
+    <a class="btn btn-outline-danger" href="{% url 'inicioA' %}">CANCELAR</a> <br><br>
 
 </form>
 

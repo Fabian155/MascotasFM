@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import AnimalAdoptable
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
+from decimal import Decimal
 
 # Create your views here.
 
@@ -48,8 +49,9 @@ def GuardarEdicion1(request):
     editele=AnimalAdoptable.objects.get(id=id)
     nuevo_logo = request.FILES.get("logo")
     nuevo_pdf = request.FILES.get("pdf")
-    precio=request.POST.get("precio", editele.precio)
-    estado=request.POST.get("estado", editele.estado)
+    precio_str = request.POST.get("precio", "0").replace(",", ".")
+    precio_decimal = Decimal(precio_str) 
+    estado=request.POST.get("estado")
 
     editele.nombre=nombre
     editele.especieid=especieid
@@ -60,7 +62,7 @@ def GuardarEdicion1(request):
         editele.logo = nuevo_logo
     if nuevo_pdf:
         editele.pdf = nuevo_pdf
-    editele.precio=precio
+    editele.precio= precio_decimal
     editele.estado=estado
     editele.save()
     messages.success(request, "Actualizacion correcta")

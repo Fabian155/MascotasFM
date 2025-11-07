@@ -32,13 +32,15 @@ def nuevaAdopcion(request):
     animales = AnimalAdoptable.objects.all()
     adoptantes = Adoptante.objects.all()
 
-    return render(request, "nuevaAdopcion.html", {
+    return render(
+        request, "nuevaAdopcion.html", 
+        {
         'animal': animales,            
         'adoptante': adoptantes,      
         'solicitud_prefill': solicitud, 
         'animal_prefill': animal,
         'adoptante_prefill': adoptante,
-    })
+        })
 
 
 def GuardarADO(request):

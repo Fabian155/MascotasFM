@@ -20,7 +20,7 @@ class AnimalAdoptable(models.Model):
         blank=True
     )
 
-    precio = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    precio=models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     estado = models.CharField(
         max_length=15,
         choices=[('DISPONIBLE', 'DISPONIBLE'), ('ADOPTADO', 'ADOPTADO')],

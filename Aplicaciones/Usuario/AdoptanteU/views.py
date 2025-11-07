@@ -14,21 +14,19 @@ def formulario_adoptante(request):
         telefono = request.POST.get("telefono")
         logo = request.FILES.get("logo")
         pdf = request.FILES.get("pdf")
-        usuario_id = request.session.get("usuario_id")
-        if not usuario_id:
-            messages.error(request, "Debes iniciar sesión para registrar tus datos.")
-            return redirect('login')
 
-        registro = Registrar.objects.filter(id=usuario_id).first()
-        if not registro:
-            messages.error(request, "No se encontró tu cuenta. Inicia sesión nuevamente.")
-            return redirect('login')
-        if Adoptante.objects.filter(registro=registro).exists():
+        # 🔹 Obtener el usuario logueado (de la tabla Registrar)
+        usuario_id = request.session.get("usuario_id")
+        registro = Registrar.objects.filter(id=usuario_id).first() if usuario_id else None
+
+        # 🔹 Verificar si ya tiene ficha de adoptante
+        if registro and Adoptante.objects.filter(registro=registro).exists():
             messages.warning(request, "Ya tienes un registro de adoptante.")
             return redirect('animalesu:u_animales')
 
+        # 🔹 Crear el adoptante y vincularlo al usuario
         Adoptante.objects.create(
-            registro=registro,
+            registro=registro,   # 👈 aquí está la diferencia
             nombre=nombre,
             cedula=cedula,
             direccion=direccion,
